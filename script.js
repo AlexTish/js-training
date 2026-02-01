@@ -1,23 +1,14 @@
 'use strict';
 
-let title = "JS Task Title";
-let screens = "Простые, Сложные, Интерактивные";
-let screenPrice = 1000;
-let rollback = 10;
-let fullPrice = 1000000;
-let adaptive = true;
-title = prompt("Как называется ваш проект?", " ");
-screens = prompt("Какие типы экранов нужно разработать?","Простые, Сложные, Интерактивные");
-screenPrice = +prompt("Сколько будет стоить данная работа?","12000");
-adaptive = confirm("Нужен ли адаптив на сайте?");
-let service1 = prompt("Какой дополнительный тип услуги нужен?");
-let servicePrice1 = +prompt("Сколько это будет стоить?");
-let service2 = prompt("Какой дополнительный тип услуги нужен?");
-let servicePrice2 = +prompt("Сколько это будет стоить?");
-fullPrice = screenPrice + servicePrice1 + servicePrice2;
-const rollbackAmount = fullPrice * (rollback/100);
-let servicePercentPrice = fullPrice - Math.ceil(rollbackAmount);
-
+const title = prompt("Как называется ваш проект?", " ");
+const screens = prompt("Какие типы экранов нужно разработать?","Простые, Сложные, Интерактивные");
+const screenPrice = +prompt("Сколько будет стоить данная работа?","12000");
+const rollback = 10;
+const adaptive = confirm("Нужен ли адаптив на сайте?");
+const service1 = prompt("Какой дополнительный тип услуги нужен?");
+const servicePrice1 = +prompt("Сколько это будет стоить?");
+const service2 = prompt("Какой дополнительный тип услуги нужен?");
+const servicePrice2 = +prompt("Сколько это будет стоить?");
 const screenArray = screens.toLowerCase().split(", ");
 
 const showTypeOf = function (variable) {
@@ -36,14 +27,41 @@ const getRollbackMessage = function(price) {
     }
 }
 
+const getAllServicePrices = function() {
+    return (servicePrice1 || 0) + (servicePrice2 || 0);
+};
+
+const getFullPrice = function() {
+    const allServicePrices = getAllServicePrices()
+    return screenPrice + allServicePrices
+}
+
+const getTitle = function() {
+    if (!title || typeof title !== "string") {
+        return "";
+    }
+    const formattedTitle = title.trim();
+    if (formattedTitle.length === 0){
+        return "";
+    }
+    return formattedTitle[0].toUpperCase() + formattedTitle.slice(1).toLowerCase();
+}
+
+const getServicePercentPrices = function() {
+    return fullPrice - Math.ceil(rollbackAmount);
+    }
+
+const allServicePrices = getAllServicePrices(); 
+const fullPrice = getFullPrice();
+const formattedTitle = getTitle();
+
 showTypeOf(title);
 showTypeOf(fullPrice);
 showTypeOf(adaptive);
 
+const rollbackAmount = fullPrice * (rollback/100);
+const servicePercentPrice = getServicePercentPrices();
+
+console.log("Типы экранов для разработки:", screenArray);
 console.log(getRollbackMessage(fullPrice));
-console.log(screens.length);
-console.log(`Стоимость верстки экранов ${screenPrice} рублей`);
-console.log(`Стоимость разработки сайта ${fullPrice} рублей`);
-console.log("Массив:", screenArray);
-console.log(`Процент вознаграждения посреднику за работу: ${rollbackAmount} рублей`);
 console.log(`Стоимость за вычетом вознаграждения: ${servicePercentPrice} рублей`);
